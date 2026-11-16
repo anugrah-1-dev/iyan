@@ -267,7 +267,7 @@
                     Pusat Pembelajaran Bahasa Asing<br>
                     Kampung Inggris Pare<br>
                     Telp: 0812-3456-7890<br>
-                    Website: https://kekampunginggris.com/
+                    Website: {{ config('app.url', url('/')) }}
                 </p>
             </div>
             <div class="inv-header-right">

@@ -6,6 +6,8 @@ $vendorDir = dirname(__DIR__);
 $baseDir = dirname($vendorDir);
 
 return array(
+    'Barryvdh\\Debugbar\\' => array($vendorDir . '/barryvdh/laravel-debugbar/src'),
+    'Barryvdh\\LaravelIdeHelper\\' => array($vendorDir . '/barryvdh/laravel-ide-helper/src'),
     'voku\\' => array($vendorDir . '/voku/portable-ascii/src/voku'),
     'ZipStream\\' => array($vendorDir . '/maennchen/zipstream-php/src'),
     'TijsVerkoyen\\CssToInlineStyles\\' => array($vendorDir . '/tijsverkoyen/css-to-inline-styles/src'),

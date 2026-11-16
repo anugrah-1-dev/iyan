@@ -308,4 +308,60 @@ Route::middleware(['auth', 'role:admin|officer'])->prefix('admin')->name('admin.
 
 });
 
+/*
+|--------------------------------------------------------------------------
+| Deployment Helper Routes (Khusus Hosting cPanel / Hostinger)
+|--------------------------------------------------------------------------
+| Route di bawah untuk mempermudah setup di hosting tanpa perlu terminal SSH.
+*/
+
+// 1. Buat symbolic link storage agar gambar/thumbnail muncul
+Route::get('/storage-link', function () {
+    $target = storage_path('app/public');
+    $link = public_path('storage');
+
+    if (file_exists($link) || is_link($link)) {
+        if (is_link($link)) {
+            @unlink($link);
+        } elseif (is_dir($link)) {
+            return "Folder 'public/storage' sudah ada berupa folder asli.";
+        } else {
+            @unlink($link);
+        }
+    }
+
+    try {
+        \Illuminate\Support\Facades\Artisan::call('storage:link');
+        return "<h3>Storage link berhasil dibuat!</h3><pre>" . \Illuminate\Support\Facades\Artisan::output() . "</pre>";
+    } catch (\Throwable $e) {
+        if (function_exists('symlink')) {
+            $success = @symlink($target, $link);
+            if ($success) {
+                return "<h3>Symlink manual PHP berhasil dibuat ke:</h3> " . $target;
+            }
+        }
+        return "<h3>Gagal membuat symlink:</h3> " . $e->getMessage();
+    }
+});
+
+// 2. Bersihkan cache aplikasi, konfigurasi, dan route
+Route::get('/clear-cache', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('optimize:clear');
+        return "<h3>Cache berhasil dibersihkan!</h3><pre>" . \Illuminate\Support\Facades\Artisan::output() . "</pre>";
+    } catch (\Throwable $e) {
+        return "<h3>Gagal membersihkan cache:</h3> " . $e->getMessage();
+    }
+});
+
+// 3. Jalankan migrasi database
+Route::get('/run-migration', function () {
+    try {
+        \Illuminate\Support\Facades\Artisan::call('migrate', ['--force' => true]);
+        return "<h3>Migrasi database berhasil!</h3><pre>" . \Illuminate\Support\Facades\Artisan::output() . "</pre>";
+    } catch (\Throwable $e) {
+        return "<h3>Gagal migrasi database:</h3> " . $e->getMessage();
+    }
+});
+
 

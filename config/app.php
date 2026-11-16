@@ -59,6 +59,8 @@ return [
 
     'asset_url' => env('ASSET_URL'),
 
+    'code_unik' => env('CODE_UNIK', '026'),
+
     /*
     |--------------------------------------------------------------------------
     | Application Timezone
