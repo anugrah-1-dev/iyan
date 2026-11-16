@@ -1,14 +1,6 @@
 <IfModule mod_rewrite.c>
     Options -MultiViews
     RewriteEngine On
-
-    # Prevent direct access to sensitive files
-    <FilesMatch "^\.(env|git|editorconfig)">
-        Order allow,deny
-        Deny from all
-    </FilesMatch>
-
-    # Send Requests To Front Controller in public directory
-    RewriteCond %{REQUEST_URI} !^/public/
+    RewriteBase /
     RewriteRule ^(.*)$ public/$1 [L]
 </IfModule>
