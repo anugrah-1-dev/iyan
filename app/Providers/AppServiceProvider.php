@@ -25,9 +25,15 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrap();
         // Pastikan View facade di-import
         \Illuminate\Support\Facades\View::composer('*', function ($view) {
-            $view->with('contactServices', Customer_Service::all());
-            $view->with('navLogo1', Logo::where('key', 'logo1')->first());
-            $view->with('navLogo2', Logo::where('key', 'logo2')->first());
+            try {
+                $view->with('contactServices', Customer_Service::all());
+                $view->with('navLogo1', Logo::where('key', 'logo1')->first());
+                $view->with('navLogo2', Logo::where('key', 'logo2')->first());
+            } catch (\Throwable $e) {
+                $view->with('contactServices', collect());
+                $view->with('navLogo1', null);
+                $view->with('navLogo2', null);
+            }
         });
     }
 }
